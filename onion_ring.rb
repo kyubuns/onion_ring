@@ -27,12 +27,12 @@ module OnionRing
     OnionRing::create_sliced_image(png, output_file_name, range_width, range_height)
 
     # left, top, right, bottom
-    range_width = [1, png.width - dpix - 1] if range_width == [0, -1]
-    range_height = [1, png.height - dpix - 1] if range_height == [0, -1]
+    range_width = [1, png.width - dpix] if range_width == [0, -1]
+    range_height = [1, png.height - dpix] if range_height == [0, -1]
     left = range_width[0] - 1
     top = range_height[0] - 1
-    right = png.width - range_width[1] - dpix - 1
-    bottom = png.height - range_height[1] - dpix - 1
+    right = png.width - range_width[1] - dpix
+    bottom = png.height - range_height[1] - dpix
 
     [left, top, right, bottom]
   end
