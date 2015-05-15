@@ -1,5 +1,14 @@
 # OnionRing
 
+## require
+
+gem install oily_png
+
+## sample
+
+ruby sample.rb
+-> generate output.png
+
 ## LICENSE
 
 The MIT License (MIT)
