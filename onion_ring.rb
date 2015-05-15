@@ -8,36 +8,33 @@ module OnionRing
     png = ChunkyPNG::Image.from_file(source_file_name)
     range_width  = OnionRing::calc_trim_range((0...png.width).map{|x| Digest::SHA1.hexdigest(png.column(x).join{|a| a.to_s}) })
     range_height = OnionRing::calc_trim_range((0...png.height).map{|y| Digest::SHA1.hexdigest(png.row(y).join{|a| a.to_s}) })
-    if range_width == nil or range_width[1] - range_width[0] <= 4
+
+    dpix = 2
+    if range_width == nil or range_width[1] - range_width[0] <= dpix*2
       range_width = [0, -1]
     else
-      range_width[0] += 2
-      range_width[1] -= 2
+      range_width[0] += dpix
+      range_width[1] -= dpix
     end
 
-    if range_height == nil or range_height[1] - range_height[0] <= 4
+    if range_height == nil or range_height[1] - range_height[0] <= dpix*2
       range_height = [0, -1]
     else
-      range_height[0] += 2
-      range_height[1] -= 2
+      range_height[0] += dpix
+      range_height[1] -= dpix
     end
 
-    output_width = png.width - ((range_width[1] - range_width[0]) + 1)
-    output_height = png.height - ((range_height[1] - range_height[0]) + 1)
+    OnionRing::create_sliced_image(png, output_file_name, range_width, range_height)
 
-    output = ChunkyPNG::Image.new(output_width, output_height, ChunkyPNG::Color::TRANSPARENT)
-    (0...output_width).each do |ax|
-      (0...output_height).each do |ay|
-        bx = ax
-        by = ay
-        bx = ax + ((range_width[1] - range_width[0]) + 1) if bx >= range_width[0]
-        by = ay + ((range_height[1] - range_height[0]) + 1) if by >= range_height[0]
-        output[ax, ay] = png.get_pixel(bx, by)
-      end
-    end
-    output.save(output_file_name)
+    # left, top, right, bottom
+    range_width = [1, png.width - dpix - 1] if range_width == [0, -1]
+    range_height = [1, png.height - dpix - 1] if range_height == [0, -1]
+    left = range_width[0] - 1
+    top = range_height[0] - 1
+    right = png.width - range_width[1] - dpix - 1
+    bottom = png.height - range_height[1] - dpix - 1
 
-    [range_width, range_height]
+    [left, top, right, bottom]
   end
 
   def self.calc_trim_range(hash_list)
@@ -58,5 +55,22 @@ module OnionRing
       end
     end
     max_range
+  end
+
+  def self.create_sliced_image(png, output_file_name, range_width, range_height)
+    output_width = png.width - ((range_width[1] - range_width[0]) + 1)
+    output_height = png.height - ((range_height[1] - range_height[0]) + 1)
+
+    output = ChunkyPNG::Image.new(output_width, output_height, ChunkyPNG::Color::TRANSPARENT)
+    (0...output_width).each do |ax|
+      (0...output_height).each do |ay|
+        bx = ax
+        by = ay
+        bx = ax + ((range_width[1] - range_width[0]) + 1) if bx >= range_width[0]
+        by = ay + ((range_height[1] - range_height[0]) + 1) if by >= range_height[0]
+        output[ax, ay] = png.get_pixel(bx, by)
+      end
+    end
+    output.save(output_file_name)
   end
 end
