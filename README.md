@@ -1,5 +1,11 @@
 # OnionRing
 
+画像をいれると、自動的に同じ色の場所を認識して、9sliced sprite用の画像を出力してくれるスクリプト。
+
+before ![before.png](https://raw.githubusercontent.com/kyubuns/onion_ring/master/sample/before.png)
+
+after ![after.png](https://raw.githubusercontent.com/kyubuns/onion_ring/master/sample/after.png)
+
 ## require
 
 gem install oily_png
@@ -7,7 +13,6 @@ gem install oily_png
 ## sample
 
 ruby sample.rb
--> generate output.png
 
 ## LICENSE
 
