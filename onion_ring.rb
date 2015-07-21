@@ -6,8 +6,8 @@ module OnionRing
     output_file_name = source_file_name unless output_file_name
 
     png = ChunkyPNG::Image.from_file(source_file_name)
-    range_width  = OnionRing::calc_trim_range((0...png.width).map{|x| Digest::SHA1.hexdigest(png.column(x).join{|a| a.to_s}) })
-    range_height = OnionRing::calc_trim_range((0...png.height).map{|y| Digest::SHA1.hexdigest(png.row(y).join{|a| a.to_s}) })
+    range_width  = OnionRing::calc_trim_range((0...png.width).map{|x| Digest::SHA1.hexdigest(png.column(x).map{|color| (ChunkyPNG::Color.a(color) != 0) ? color : 0}.join(',')) })
+    range_height = OnionRing::calc_trim_range((0...png.height).map{|y| Digest::SHA1.hexdigest(png.row(y).map{|color| (ChunkyPNG::Color.a(color) != 0) ? color : 0}.join(',')) })
 
     dpix = 2
     if range_width == nil or range_width[1] - range_width[0] <= dpix*2
