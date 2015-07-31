@@ -6,6 +6,10 @@ before ![before.png](https://raw.githubusercontent.com/kyubuns/onion_ring/master
 
 after ![after.png](https://raw.githubusercontent.com/kyubuns/onion_ring/master/sample/after.png)
 
+## 説明記事
+
+http://studio.oinkgms.com/post/119077278697
+
 ## require
 
 gem install oily_png
